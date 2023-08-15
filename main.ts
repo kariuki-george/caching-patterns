@@ -2,7 +2,12 @@ import express, { NextFunction, Request, Response } from "express";
 import * as dotenv from "dotenv";
 import prisma from "./providers/db";
 import { json } from "body-parser";
-import { UsersRouter, AuthRouter } from "./controllers";
+import {
+  UsersRouter,
+  AuthRouter,
+  PostsRouter,
+  CommentsRouter,
+} from "./controllers";
 import { IUser } from "./services/users.service";
 import { authMiddleware } from "./services/auth.service";
 
@@ -24,10 +29,9 @@ app.use("/users", UsersRouter);
 app.use("/auth", AuthRouter);
 
 // Routers with auth
-app.use((req, res, next) => {
-  authMiddleware(req, res, next);
-  next();
-});
+
+app.use("/posts", authMiddleware, PostsRouter);
+app.use("/comments", authMiddleware, CommentsRouter);
 
 // Shutdown services after request and handle errors
 

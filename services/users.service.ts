@@ -40,8 +40,9 @@ export const createUser = async ({ email, name, password }: ICreateUser) => {
 
 export const getUserByEmail = async (email: string): Promise<IUser | null> => {
   // Cache aside
+
   const userString = await redis.get("user-" + email);
-  if (userString) {
+  if (userString && userString !== "null") {
     return JSON.parse(userString);
   }
 

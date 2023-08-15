@@ -16,10 +16,12 @@ export const authMiddleware = async (
   _res: Response,
   next: NextFunction
 ) => {
-  // Auth token in passed in aid header
-  const aid = req.headers["aid"] as string;
-
   try {
+    // Auth token in passed in aid header
+    const aid = req.headers["aid"] as string;
+    if (!aid) {
+      throw new Error("Auth token has not been provided");
+    }
     const payload: IUser = verify(aid, process.env.JWT_SECRET as string, {
       issuer: "Caching-Code-Login",
       audience: "Caching-Code-Auth",
@@ -30,7 +32,10 @@ export const authMiddleware = async (
     if (!user) {
       throw new Error("Authentication failed");
     }
+
     req.user = user;
+
+    next();
   } catch (error) {
     next(error);
   }

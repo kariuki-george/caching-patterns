@@ -3,7 +3,7 @@ import { login } from "../services/auth.service";
 
 const router = Router();
 
-router.get("/login", async (req, res, next) => {
+router.post("/login", async (req, res, next) => {
   try {
     //   Can do more data validation
     const { email, password } = req.body;
