@@ -1,6 +1,6 @@
 import * as argon from "argon2";
 import { IUser, getUserByEmail } from "./users.service";
-import prisma from "../providers/db";
+import db from "../providers/db";
 import { sign, verify } from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 
@@ -46,7 +46,7 @@ export const login = async (
   password: string
 ): Promise<{ token: string; user: IUser }> => {
   // Get user
-  const user = await prisma.users.findUnique({ where: { email } });
+  const user = await db.users.findUnique({ where: { email } });
   if (!user) {
     throw new Error("User with the provided email not found");
   }

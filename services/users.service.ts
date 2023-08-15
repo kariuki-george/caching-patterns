@@ -1,4 +1,4 @@
-import prisma from "../providers/db";
+import db from "../providers/db";
 import redis from "../providers/redis";
 import { hashPass } from "./auth.service";
 
@@ -23,7 +23,7 @@ export const createUser = async ({ email, name, password }: ICreateUser) => {
 
   const hashedPassword = await hashPass(password);
   try {
-    const { id } = await prisma.users.create({
+    const { id } = await db.users.create({
       data: { email, name, password: hashedPassword },
       select: { id: true },
     });
@@ -46,7 +46,7 @@ export const getUserByEmail = async (email: string): Promise<IUser | null> => {
     return JSON.parse(userString);
   }
 
-  const user = await prisma.users.findUnique({
+  const user = await db.users.findUnique({
     where: { email },
     select: { email: true, name: true, id: true },
   });
