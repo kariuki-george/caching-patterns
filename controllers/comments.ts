@@ -15,7 +15,6 @@ router.get("/", async (_res, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    //   Write behind caches
     const newComment = await createComment(req.body, req.user.id);
     res.json(newComment);
   } catch (error) {

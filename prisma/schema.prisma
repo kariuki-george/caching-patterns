@@ -20,6 +20,7 @@ model Users{
   password String
   posts Posts[]
   comments Comments[]
+  jwtVersion Int @default(0)
 }
 
 model Posts{
@@ -34,11 +35,10 @@ model Posts{
 
 
 model Comments{
-  id Int @id @default(autoincrement())
+  uuid String @unique  @id 
   author    Users  @relation(fields: [authorId], references: [id])
   authorId  Int
   post    Posts  @relation(fields: [postId], references: [id])
   postId  Int
   comment String
 }
-

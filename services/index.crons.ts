@@ -1,5 +1,6 @@
 import * as cron from "node-cron";
 import { cachePosts } from "./posts.service";
+import { writeBehindComments } from "./comments.service";
 
 // Execute task every ten minutes
 export const prefetchTasks = cron.schedule(
@@ -8,6 +9,19 @@ export const prefetchTasks = cron.schedule(
     await cachePosts();
   },
   { name: "prefetchPosts", scheduled: true, runOnInit: true }
+);
+
+// To run after every minute
+export const bulkWriteComments = cron.schedule(
+  "* * * * *",
+  async () => {
+    await writeBehindComments();
+  },
+  {
+    name: "bulkWriteComments",
+    scheduled: true,
+    runOnInit: true,
+  }
 );
 
 const crons = [prefetchTasks];
